@@ -22,7 +22,7 @@ public record EventoRequestDTO(
         @NotNull
         LocalDate dataTermino,
 
-        @NotBlank
+        @NotNull
         TipoEvento tipoEvento,
 
         @NotNull
