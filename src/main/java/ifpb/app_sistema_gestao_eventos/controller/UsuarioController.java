@@ -33,7 +33,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> salvarUsuario(@RequestBody UsuarioRequestDTO usuario) {
+    public ResponseEntity<UsuarioResponseDTO> salvarUsuario(@Valid @RequestBody UsuarioRequestDTO usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.salvarUsuario(usuario));
     }
 
