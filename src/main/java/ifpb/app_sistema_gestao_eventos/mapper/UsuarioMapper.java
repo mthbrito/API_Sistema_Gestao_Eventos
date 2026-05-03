@@ -4,9 +4,7 @@ import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioResponseDTO;
 import ifpb.app_sistema_gestao_eventos.model.entity.Perfil;
 import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
-import org.springframework.stereotype.Component;
 
-@Component
 public class UsuarioMapper {
 
     public static Usuario toUsuario(UsuarioRequestDTO usuario) {

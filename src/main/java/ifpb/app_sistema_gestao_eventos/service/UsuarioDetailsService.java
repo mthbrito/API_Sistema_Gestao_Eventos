@@ -1,8 +1,9 @@
 package ifpb.app_sistema_gestao_eventos.service;
 
-import ifpb.app_sistema_gestao_eventos.model.UsuarioDetails;
+import ifpb.app_sistema_gestao_eventos.security.UsuarioDetails;
 import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
 import ifpb.app_sistema_gestao_eventos.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +19,7 @@ public class UsuarioDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) {
         Usuario usuario;
         usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));

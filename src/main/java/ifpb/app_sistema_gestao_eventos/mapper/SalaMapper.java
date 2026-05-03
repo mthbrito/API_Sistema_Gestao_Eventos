@@ -3,9 +3,7 @@ package ifpb.app_sistema_gestao_eventos.mapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.SalaRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.SalaResponseDTO;
 import ifpb.app_sistema_gestao_eventos.model.entity.Sala;
-import org.springframework.stereotype.Component;
 
-@Component
 public class SalaMapper {
 
     public static Sala toSala(SalaRequestDTO sala) {

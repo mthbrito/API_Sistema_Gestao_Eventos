@@ -1,5 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,14 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
+    private Claims extrairClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
     public String gerarToken(UserDetails userDetails) {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
@@ -33,22 +42,13 @@ public class JwtService {
     }
 
     public String extrairEmail(String token) {
-        return Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        return extrairClaims(token).getSubject();
     }
 
     public boolean tokenValido(String token, UserDetails userDetails) {
-        String email = extrairEmail(token);
-        Date expiracao = Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration();
+        Claims claims = extrairClaims(token);
+        String email = claims.getSubject();
+        Date expiracao = claims.getExpiration();
         return email.equals(userDetails.getUsername()) && expiracao.after(new Date());
     }
 }

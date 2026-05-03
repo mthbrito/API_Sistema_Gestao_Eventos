@@ -66,7 +66,7 @@ public class UsuarioService {
 
     public void deletarUsuario(Long id) {
         if(!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Evento não encontrado");
+            throw new RuntimeException("Usuário não encontrado");
         }
         usuarioRepository.deleteById(id);
     }

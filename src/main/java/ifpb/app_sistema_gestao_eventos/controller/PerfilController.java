@@ -2,7 +2,6 @@ package ifpb.app_sistema_gestao_eventos.controller;
 
 import ifpb.app_sistema_gestao_eventos.model.dto.PerfilRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.PerfilResponseDTO;
-import ifpb.app_sistema_gestao_eventos.model.entity.Perfil;
 import ifpb.app_sistema_gestao_eventos.service.PerfilService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/sge/perfis")
@@ -23,12 +21,12 @@ public class PerfilController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Perfil>> listarPerfis() {
+    public ResponseEntity<List<PerfilResponseDTO>> listarPerfis() {
         return ResponseEntity.ok(perfilService.listarPerfis());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Perfil> buscarPerfilPorId(@PathVariable Long id) {
+    public ResponseEntity<PerfilResponseDTO> buscarPerfilPorId(@PathVariable Long id) {
         return ResponseEntity.ok(perfilService.buscarPerfilPorId(id));
     }
 

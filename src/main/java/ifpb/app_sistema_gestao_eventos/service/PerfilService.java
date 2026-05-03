@@ -8,7 +8,6 @@ import ifpb.app_sistema_gestao_eventos.repository.PerfilRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static ifpb.app_sistema_gestao_eventos.mapper.PerfilMapper.toPerfil;
 import static ifpb.app_sistema_gestao_eventos.mapper.PerfilMapper.toPerfilResponseDTO;
@@ -22,12 +21,16 @@ public class PerfilService {
         this.perfilRepository = perfilRepository;
     }
 
-    public List<Perfil> listarPerfis() {
-        return perfilRepository.findAll();
+    public List<PerfilResponseDTO> listarPerfis() {
+        return perfilRepository.findAll()
+                .stream()
+                .map(PerfilMapper::toPerfilResponseDTO)
+                .toList();
     }
 
-    public Perfil buscarPerfilPorId(Long id) {
+    public PerfilResponseDTO buscarPerfilPorId(Long id) {
         return perfilRepository.findById(id)
+                .map(PerfilMapper::toPerfilResponseDTO)
                 .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
     }
 

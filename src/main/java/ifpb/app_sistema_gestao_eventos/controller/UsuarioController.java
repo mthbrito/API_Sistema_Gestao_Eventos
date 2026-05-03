@@ -2,7 +2,6 @@ package ifpb.app_sistema_gestao_eventos.controller;
 
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioResponseDTO;
-import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
 import ifpb.app_sistema_gestao_eventos.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/sge/usuarios")

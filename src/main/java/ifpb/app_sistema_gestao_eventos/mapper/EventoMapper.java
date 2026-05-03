@@ -3,9 +3,7 @@ package ifpb.app_sistema_gestao_eventos.mapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.EventoRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.EventoResponseDTO;
 import ifpb.app_sistema_gestao_eventos.model.entity.Evento;
-import org.springframework.stereotype.Component;
 
-@Component
 public class EventoMapper {
 
     public static Evento toEvento(EventoRequestDTO evento) {

@@ -19,7 +19,6 @@ public record UsuarioRequestDTO(
 
     String senha,
 
-    @NotBlank
     TipoFuncao funcao,
 
     @NotEmpty

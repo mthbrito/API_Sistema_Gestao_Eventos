@@ -2,7 +2,6 @@ package ifpb.app_sistema_gestao_eventos.controller;
 
 import ifpb.app_sistema_gestao_eventos.model.dto.NotificacaoRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.NotificacaoResponseDTO;
-import ifpb.app_sistema_gestao_eventos.model.entity.Notificacao;
 import ifpb.app_sistema_gestao_eventos.service.NotificacaoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/sge/notificacoes")
@@ -33,7 +31,7 @@ public class NotificacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Notificacao> salvarNotificacao(@Valid @RequestBody Notificacao notificacao) {
+    public ResponseEntity<NotificacaoResponseDTO> salvarNotificacao(@Valid @RequestBody NotificacaoRequestDTO notificacao) {
         return ResponseEntity.status(HttpStatus.CREATED).body(notificacaoService.salvarNotificacao(notificacao));
     }
 

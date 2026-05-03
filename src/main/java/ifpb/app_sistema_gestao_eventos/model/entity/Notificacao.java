@@ -25,4 +25,11 @@ public class Notificacao {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    public Notificacao(String mensagem, boolean lida, Usuario usuario) {
+        this.mensagem = mensagem;
+        this.dataEnvio = LocalDate.now();
+        this.lida = lida;
+        this.usuario = usuario;
+    }
 }

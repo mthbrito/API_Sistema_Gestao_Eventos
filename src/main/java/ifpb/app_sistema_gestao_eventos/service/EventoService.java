@@ -10,7 +10,6 @@ import ifpb.app_sistema_gestao_eventos.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static ifpb.app_sistema_gestao_eventos.mapper.EventoMapper.toEvento;
 import static ifpb.app_sistema_gestao_eventos.mapper.EventoMapper.toEventoResponseDTO;

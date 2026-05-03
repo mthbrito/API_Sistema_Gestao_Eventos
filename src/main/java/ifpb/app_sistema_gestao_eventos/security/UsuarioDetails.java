@@ -1,4 +1,4 @@
-package ifpb.app_sistema_gestao_eventos.model;
+package ifpb.app_sistema_gestao_eventos.security;
 
 import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
 import org.springframework.security.core.GrantedAuthority;

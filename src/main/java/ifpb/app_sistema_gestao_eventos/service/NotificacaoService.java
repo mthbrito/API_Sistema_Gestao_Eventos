@@ -4,19 +4,23 @@ import ifpb.app_sistema_gestao_eventos.mapper.NotificacaoMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.NotificacaoRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.NotificacaoResponseDTO;
 import ifpb.app_sistema_gestao_eventos.model.entity.Notificacao;
+import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
 import ifpb.app_sistema_gestao_eventos.repository.NotificacaoRepository;
+import ifpb.app_sistema_gestao_eventos.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NotificacaoService {
 
     private final NotificacaoRepository notificacaoRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public NotificacaoService(NotificacaoRepository notificacaoRepository) {
+    public NotificacaoService(NotificacaoRepository notificacaoRepository, UsuarioRepository usuarioRepository) {
         this.notificacaoRepository = notificacaoRepository;
+        this.usuarioRepository = usuarioRepository;
+
     }
 
     public List<NotificacaoResponseDTO> listarNotificacoes() {
@@ -32,8 +36,11 @@ public class NotificacaoService {
                 .orElseThrow(() -> new RuntimeException("Notificação não encontrada"));
     }
 
-    public Notificacao salvarNotificacao(Notificacao notificacao) {
-        return notificacaoRepository.save(notificacao);
+    public NotificacaoResponseDTO salvarNotificacao(NotificacaoRequestDTO dto) {
+        Usuario usuario = usuarioRepository.findById(dto.usuarioId())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Notificacao novaNotificacao = NotificacaoMapper.toNotificacao(dto, usuario);
+        return NotificacaoMapper.toNotificacaoResponseDTO(notificacaoRepository.save(novaNotificacao));
     }
 
     public NotificacaoResponseDTO atualizarNotificacao(Long id, NotificacaoRequestDTO notificacao) {
