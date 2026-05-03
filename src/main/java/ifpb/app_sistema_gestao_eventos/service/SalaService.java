@@ -1,5 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.service;
 
+import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
 import ifpb.app_sistema_gestao_eventos.mapper.SalaMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.SalaRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.SalaResponseDTO;
@@ -31,7 +32,7 @@ public class SalaService {
     public SalaResponseDTO buscarSalaPorId(Long id) {
         return salaRepository.findById(id)
                 .map(SalaMapper::toSalaResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Sala não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Sala não encontrada"));
     }
 
     public SalaResponseDTO salvarSala(SalaRequestDTO sala) {
@@ -42,7 +43,7 @@ public class SalaService {
 
     public SalaResponseDTO atualizarSala(Long id, SalaRequestDTO sala) {
         Sala salaAtualizada = salaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Sala não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Sala não encontrada"));
         salaAtualizada.setNome(sala.nome());
         salaAtualizada.setCapacidade(sala.capacidade());
         salaAtualizada.setLocalizacao(sala.localizacao());

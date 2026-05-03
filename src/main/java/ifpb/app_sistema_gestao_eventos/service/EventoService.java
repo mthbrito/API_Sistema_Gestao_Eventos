@@ -1,5 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.service;
 
+import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
 import ifpb.app_sistema_gestao_eventos.mapper.EventoMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.EventoRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.EventoResponseDTO;
@@ -39,20 +40,20 @@ public class EventoService {
     public EventoResponseDTO buscarEventoPorId(Long id) {
         return eventoRepository.findById(id)
                 .map(EventoMapper::toEventoResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Evento não encontrado"));
     }
 
     public EventoResponseDTO salvarEvento(EventoRequestDTO evento) {
         Evento novoEvento = toEvento(evento);
-        novoEvento.setOrganizador(usuarioRepository.findById(evento.organizadorId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado")));
-        novoEvento.setSala(salaRepository.findById(evento.salaId()).orElseThrow(() -> new RuntimeException("Sala não encontrada")));
+        novoEvento.setOrganizador(usuarioRepository.findById(evento.organizadorId()).orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado")));
+        novoEvento.setSala(salaRepository.findById(evento.salaId()).orElseThrow(() -> new EntidadeNaoEncontradaException("Sala não encontrada")));
         eventoRepository.save(novoEvento);
         return toEventoResponseDTO(novoEvento);
     }
 
     public EventoResponseDTO atualizarEvento(Long id, EventoRequestDTO evento) {
         Evento eventoAtualizado = eventoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Evento não encontrado"));
         eventoAtualizado.setTitulo(evento.titulo());
         eventoAtualizado.setDescricao(evento.descricao());
         eventoAtualizado.setDataInicio(evento.dataInicio());

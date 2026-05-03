@@ -1,5 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.service;
 
+import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
 import ifpb.app_sistema_gestao_eventos.mapper.InscricaoMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.InscricaoRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.InscricaoResponseDTO;
@@ -38,12 +39,12 @@ public class InscricaoService {
     public InscricaoResponseDTO buscarInscricaoPorId(Long id) {
         return inscricaoRepository.findById(id)
                 .map(InscricaoMapper::toInscricaoResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Inscrição não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Inscrição não encontrada"));
     }
 
     public InscricaoResponseDTO salvarInscricao(InscricaoRequestDTO inscricao) {
-        Usuario usuario = usuarioRepository.findById(inscricao.usuarioId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        Evento evento = eventoRepository.findById(inscricao.eventoId()).orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+        Usuario usuario = usuarioRepository.findById(inscricao.usuarioId()).orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
+        Evento evento = eventoRepository.findById(inscricao.eventoId()).orElseThrow(() -> new EntidadeNaoEncontradaException("Evento não encontrado"));
         Inscricao novaInscricao = new Inscricao(usuario, evento);
         inscricaoRepository.save(novaInscricao);
         return toInscricaoResponseDTO(novaInscricao);
@@ -51,7 +52,7 @@ public class InscricaoService {
 
     public InscricaoResponseDTO atualizarInscricao(Long id, InscricaoRequestDTO inscricao) {
         Inscricao inscricaoAtualizada = inscricaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Inscrição não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Inscrição não encontrada"));
         return InscricaoMapper.toInscricaoResponseDTO(inscricaoRepository.save(inscricaoAtualizada));
     }
 

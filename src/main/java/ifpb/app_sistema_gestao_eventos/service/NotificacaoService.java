@@ -1,5 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.service;
 
+import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
 import ifpb.app_sistema_gestao_eventos.mapper.NotificacaoMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.NotificacaoRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.NotificacaoResponseDTO;
@@ -33,19 +34,19 @@ public class NotificacaoService {
     public NotificacaoResponseDTO buscarNotificacaoPorId(Long id) {
         return notificacaoRepository.findById(id)
                 .map(NotificacaoMapper::toNotificacaoResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Notificação não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Notificação não encontrada"));
     }
 
     public NotificacaoResponseDTO salvarNotificacao(NotificacaoRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.usuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
         Notificacao novaNotificacao = NotificacaoMapper.toNotificacao(dto, usuario);
         return NotificacaoMapper.toNotificacaoResponseDTO(notificacaoRepository.save(novaNotificacao));
     }
 
     public NotificacaoResponseDTO atualizarNotificacao(Long id, NotificacaoRequestDTO notificacao) {
         Notificacao notificacaoAtualizada = notificacaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Notificação não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Notificação não encontrada"));
         notificacaoAtualizada.setMensagem(notificacao.mensagem());
         notificacaoAtualizada.setLida(notificacao.lida());
         return NotificacaoMapper.toNotificacaoResponseDTO(notificacaoRepository.save(notificacaoAtualizada));

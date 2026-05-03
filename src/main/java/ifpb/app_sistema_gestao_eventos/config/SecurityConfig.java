@@ -5,11 +5,13 @@ import ifpb.app_sistema_gestao_eventos.service.UsuarioDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,11 +43,17 @@ public class SecurityConfig {
                         .requestMatchers("/api/sge/perfis/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/sge/salas/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/sge/salas/**").hasRole("ADMIN")
-                        .requestMatchers("/api/sge/eventos/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/api/sge/inscricoes/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/api/sge/notificacoes/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.GET, "/api/sge/eventos/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/sge/eventos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/sge/inscricoes/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/sge/inscricoes").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/sge/inscricoes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/sge/notificacoes/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/sge/notificacoes/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(this::configureExceptionHandling)
                 .userDetailsService(usuarioDetailsService)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -60,5 +68,23 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private void configureExceptionHandling(ExceptionHandlingConfigurer<HttpSecurity> ex) {
+        ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                    response.setContentType("application/json");
+                    response.getWriter().write(
+                            "Token inválido, expirado ou ausente"
+                    );
+                })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
+                    response.setContentType("application/json");
+                    response.getWriter().write(
+                            "Você não tem permissão para acessar este recurso"
+                    );
+                });
     }
 }

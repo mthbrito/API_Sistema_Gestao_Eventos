@@ -1,5 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.service;
 
+import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
 import ifpb.app_sistema_gestao_eventos.mapper.UsuarioMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioResponseDTO;
@@ -38,7 +39,7 @@ public class UsuarioService {
     public UsuarioResponseDTO buscarUsuarioPorId(Long id) {
         return usuarioRepository.findById(id)
                 .map(UsuarioMapper::toUsuarioResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
     }
 
     public UsuarioResponseDTO salvarUsuario(UsuarioRequestDTO usuario) {
@@ -52,7 +53,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioRequestDTO usuario) {
         Usuario usuarioAtualizado = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
         usuarioAtualizado.setNome(usuario.nome());
         usuarioAtualizado.setEmail(usuario.email());
         if (usuario.senha() != null && !usuario.senha().isBlank()) {
@@ -63,7 +64,7 @@ public class UsuarioService {
 
     public void deletarUsuario(Long id) {
         if(!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuário não encontrado");
+            throw new EntidadeNaoEncontradaException("Usuário não encontrado");
         }
         usuarioRepository.deleteById(id);
     }

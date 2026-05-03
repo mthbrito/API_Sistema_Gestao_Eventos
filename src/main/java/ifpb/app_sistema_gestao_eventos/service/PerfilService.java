@@ -1,5 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.service;
 
+import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
 import ifpb.app_sistema_gestao_eventos.mapper.PerfilMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.PerfilRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.PerfilResponseDTO;
@@ -31,7 +32,7 @@ public class PerfilService {
     public PerfilResponseDTO buscarPerfilPorId(Long id) {
         return perfilRepository.findById(id)
                 .map(PerfilMapper::toPerfilResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Perfil não encontrado"));
     }
 
     public PerfilResponseDTO salvarPerfil(PerfilRequestDTO perfil) {
@@ -42,7 +43,7 @@ public class PerfilService {
 
     public PerfilResponseDTO atualizarPerfil(Long id, PerfilRequestDTO perfil) {
         Perfil perfilAtualizado = perfilRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Perfil não encontrado"));
         perfilAtualizado.setNome(perfil.nome());
         return PerfilMapper.toPerfilResponseDTO(perfilRepository.save(perfilAtualizado));
     }

@@ -1,4 +1,4 @@
-package ifpb.app_sistema_gestao_eventos.exceptions;
+package ifpb.app_sistema_gestao_eventos.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
