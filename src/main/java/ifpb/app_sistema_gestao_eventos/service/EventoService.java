@@ -18,26 +18,26 @@ import static ifpb.app_sistema_gestao_eventos.mapper.EventoMapper.toEventoRespon
 @Service
 public class EventoService {
 
-    private final EventoRepository repository;
+    private final EventoRepository eventoRepository;
     private final UsuarioRepository usuarioRepository;
     private final SalaRepository salaRepository;
 
 
     public EventoService(EventoRepository eventoRepository, UsuarioRepository usuarioRepository, SalaRepository salaRepository) {
-        this.repository = eventoRepository;
+        this.eventoRepository = eventoRepository;
         this.usuarioRepository = usuarioRepository;
         this.salaRepository = salaRepository;
     }
 
     public List<EventoResponseDTO> listarEventos() {
-        return repository.findAll()
+        return eventoRepository.findAll()
                 .stream()
                 .map(EventoMapper::toEventoResponseDTO)
                 .toList();
     }
 
     public EventoResponseDTO buscarEventoPorId(Long id) {
-        return repository.findById(id)
+        return eventoRepository.findById(id)
                 .map(EventoMapper::toEventoResponseDTO)
                 .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
     }
@@ -46,22 +46,22 @@ public class EventoService {
         Evento novoEvento = toEvento(evento);
         novoEvento.setOrganizador(usuarioRepository.findById(evento.organizadorId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado")));
         novoEvento.setSala(salaRepository.findById(evento.salaId()).orElseThrow(() -> new RuntimeException("Sala não encontrada")));
-        repository.save(novoEvento);
+        eventoRepository.save(novoEvento);
         return toEventoResponseDTO(novoEvento);
     }
 
     public EventoResponseDTO atualizarEvento(Long id, EventoRequestDTO evento) {
-        Evento eventoAtualizado = repository.findById(id)
+        Evento eventoAtualizado = eventoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
         eventoAtualizado.setTitulo(evento.titulo());
         eventoAtualizado.setDescricao(evento.descricao());
         eventoAtualizado.setDataInicio(evento.dataInicio());
         eventoAtualizado.setDataTermino(evento.dataTermino());
         eventoAtualizado.setTipoEvento(evento.tipoEvento());
-        return EventoMapper.toEventoResponseDTO(repository.save(eventoAtualizado));
+        return EventoMapper.toEventoResponseDTO(eventoRepository.save(eventoAtualizado));
     }
 
     public void deletarEvento(Long id) {
-        repository.deleteById(id);
+        eventoRepository.deleteById(id);
     }
 }

@@ -21,14 +21,11 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UsuarioDetailsService usuarioDetailsService;
 
     public AuthController(AuthenticationManager authenticationManager,
-                          JwtService jwtService,
-                          UsuarioDetailsService usuarioDetailsService) {
+                          JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
-        this.usuarioDetailsService = usuarioDetailsService;
     }
 
     @PostMapping("/login")

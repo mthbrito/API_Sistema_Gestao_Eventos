@@ -17,6 +17,7 @@ public record UsuarioRequestDTO(
     @NotBlank
     String email,
 
+    @NotBlank
     String senha,
 
     TipoFuncao funcao,

@@ -42,9 +42,6 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO salvarUsuario(UsuarioRequestDTO usuario) {
-        if (usuario.senha() == null || usuario.senha().isBlank()) {
-            throw new IllegalArgumentException("Senha obrigatória no cadastro");
-        }
         Usuario novoUsuario = toUsuario(usuario);
         novoUsuario.setSenha(passwordEncoder.encode(usuario.senha()));
         List<Perfil> perfis = perfilRepository.findAllById(usuario.perfisIds());

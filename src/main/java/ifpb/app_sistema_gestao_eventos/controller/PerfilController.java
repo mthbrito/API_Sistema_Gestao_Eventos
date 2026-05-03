@@ -31,7 +31,7 @@ public class PerfilController {
     }
 
     @PostMapping
-    public ResponseEntity<PerfilResponseDTO> salvarPerfil(@RequestBody PerfilRequestDTO perfil) {
+    public ResponseEntity<PerfilResponseDTO> salvarPerfil(@Valid @RequestBody PerfilRequestDTO perfil) {
         return ResponseEntity.status(HttpStatus.CREATED).body(perfilService.salvarPerfil(perfil));
     }
 

@@ -16,11 +16,6 @@ public class NotificacaoMapper {
     }
 
     public static NotificacaoResponseDTO toNotificacaoResponseDTO(Notificacao notificacao) {
-
-        if (notificacao == null) {
-            return null;
-        }
-
         String usuarioNome = null;
 
         if (notificacao.getUsuario() != null) {
