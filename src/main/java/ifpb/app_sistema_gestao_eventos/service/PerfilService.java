@@ -1,14 +1,15 @@
 package ifpb.app_sistema_gestao_eventos.service;
 
+import ifpb.app_sistema_gestao_eventos.exception.EntidadeJaCadastradaException;
 import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
 import ifpb.app_sistema_gestao_eventos.mapper.PerfilMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.PerfilRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.PerfilResponseDTO;
 import ifpb.app_sistema_gestao_eventos.model.entity.Perfil;
 import ifpb.app_sistema_gestao_eventos.repository.PerfilRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static ifpb.app_sistema_gestao_eventos.mapper.PerfilMapper.toPerfil;
 import static ifpb.app_sistema_gestao_eventos.mapper.PerfilMapper.toPerfilResponseDTO;
@@ -22,11 +23,9 @@ public class PerfilService {
         this.perfilRepository = perfilRepository;
     }
 
-    public List<PerfilResponseDTO> listarPerfis() {
-        return perfilRepository.findAll()
-                .stream()
-                .map(PerfilMapper::toPerfilResponseDTO)
-                .toList();
+    public Page<PerfilResponseDTO> listarPerfis(Pageable pageable) {
+        return perfilRepository.findAll(pageable)
+                .map(PerfilMapper::toPerfilResponseDTO);
     }
 
     public PerfilResponseDTO buscarPerfilPorId(Long id) {
@@ -36,19 +35,26 @@ public class PerfilService {
     }
 
     public PerfilResponseDTO salvarPerfil(PerfilRequestDTO perfil) {
-        Perfil novoPerfil = toPerfil(perfil);
-        perfilRepository.save(novoPerfil);
-        return toPerfilResponseDTO(novoPerfil);
+        if (perfilRepository.existsByNome(perfil.nome())) {
+            throw new EntidadeJaCadastradaException("Perfil já cadastrado");
+        }
+        return toPerfilResponseDTO(perfilRepository.save(toPerfil(perfil)));
     }
 
     public PerfilResponseDTO atualizarPerfil(Long id, PerfilRequestDTO perfil) {
         Perfil perfilAtualizado = perfilRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Perfil não encontrado"));
+        if (perfilRepository.existsByNomeAndIdNot(perfil.nome(), id)) {
+            throw new EntidadeJaCadastradaException("Perfil já cadastrado");
+        }
         perfilAtualizado.setNome(perfil.nome());
-        return PerfilMapper.toPerfilResponseDTO(perfilRepository.save(perfilAtualizado));
+        return toPerfilResponseDTO(perfilRepository.save(perfilAtualizado));
     }
 
     public void deletarPerfil(Long id) {
+        if (!perfilRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("Perfil não encontrado");
+        }
         perfilRepository.deleteById(id);
     }
 }

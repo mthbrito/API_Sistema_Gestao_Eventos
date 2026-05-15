@@ -23,6 +23,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
+    @ExceptionHandler(EntidadeJaCadastradaException.class)
+    public ResponseEntity<String> handleJaCadastrado(EntidadeJaCadastradaException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidacao(MethodArgumentNotValidException e) {
         Map<String, String> erros = new HashMap<>();

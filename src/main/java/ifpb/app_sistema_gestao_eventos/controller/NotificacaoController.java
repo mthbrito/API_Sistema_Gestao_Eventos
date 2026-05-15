@@ -4,6 +4,8 @@ import ifpb.app_sistema_gestao_eventos.model.dto.NotificacaoRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.NotificacaoResponseDTO;
 import ifpb.app_sistema_gestao_eventos.service.NotificacaoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/sge/notificacoes")
+@RequestMapping("/api/sge/notificacoes")
 public class NotificacaoController {
 
     private final NotificacaoService notificacaoService;
@@ -21,8 +23,8 @@ public class NotificacaoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NotificacaoResponseDTO>> listarNotificacoes() {
-        return ResponseEntity.ok(notificacaoService.listarNotificacoes());
+    public ResponseEntity<Page<NotificacaoResponseDTO>> listarNotificacoes(Pageable pageable) {
+        return ResponseEntity.ok(notificacaoService.listarNotificacoes(pageable));
     }
 
     @GetMapping("/{id}")

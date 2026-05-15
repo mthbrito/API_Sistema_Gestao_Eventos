@@ -8,9 +8,9 @@ import ifpb.app_sistema_gestao_eventos.model.entity.Notificacao;
 import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
 import ifpb.app_sistema_gestao_eventos.repository.NotificacaoRepository;
 import ifpb.app_sistema_gestao_eventos.repository.UsuarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class NotificacaoService {
@@ -24,11 +24,9 @@ public class NotificacaoService {
 
     }
 
-    public List<NotificacaoResponseDTO> listarNotificacoes() {
-        return notificacaoRepository.findAll()
-                .stream()
-                .map(NotificacaoMapper::toNotificacaoResponseDTO)
-                .toList();
+    public Page<NotificacaoResponseDTO> listarNotificacoes(Pageable pageable) {
+        return notificacaoRepository.findAll(pageable)
+                .map(NotificacaoMapper::toNotificacaoResponseDTO);
     }
 
     public NotificacaoResponseDTO buscarNotificacaoPorId(Long id) {
@@ -53,6 +51,9 @@ public class NotificacaoService {
     }
 
     public void deletarNotificacao(Long id) {
+        if (!notificacaoRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("Notificação não encontrada");
+        }
         notificacaoRepository.deleteById(id);
     }
 }

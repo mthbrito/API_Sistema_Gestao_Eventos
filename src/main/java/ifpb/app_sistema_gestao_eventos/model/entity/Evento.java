@@ -19,14 +19,16 @@ public class Evento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 50, unique = true)
+    @Column(nullable = false, length = 100)
     private String titulo;
 
     @Column(nullable = false, length = 100)
     private String descricao;
 
+    @Column(nullable = false)
     private LocalDate dataInicio;
 
+    @Column(nullable = false)
     private LocalDate dataTermino;
 
     @Enumerated(EnumType.STRING)

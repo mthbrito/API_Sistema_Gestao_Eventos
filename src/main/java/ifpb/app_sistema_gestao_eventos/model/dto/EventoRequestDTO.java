@@ -16,10 +16,11 @@ public record EventoRequestDTO(
         String descricao,
 
         @NotNull
-        @Future
+        @FutureOrPresent
         LocalDate dataInicio,
 
         @NotNull
+        @Future
         LocalDate dataTermino,
 
         @NotNull

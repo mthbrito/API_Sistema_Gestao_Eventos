@@ -4,14 +4,14 @@ import ifpb.app_sistema_gestao_eventos.model.dto.InscricaoRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.InscricaoResponseDTO;
 import ifpb.app_sistema_gestao_eventos.service.InscricaoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("api/sge/inscricoes")
+@RequestMapping("/api/sge/inscricoes")
 public class InscricaoController {
 
     private final InscricaoService inscricaoService;
@@ -21,8 +21,8 @@ public class InscricaoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<InscricaoResponseDTO>> listarInscricoes() {
-        return ResponseEntity.ok(inscricaoService.listarInscricoes());
+    public ResponseEntity<Page<InscricaoResponseDTO>> listarInscricoes(Pageable pageable) {
+        return ResponseEntity.ok(inscricaoService.listarInscricoes(pageable));
     }
 
     @GetMapping("/{id}")

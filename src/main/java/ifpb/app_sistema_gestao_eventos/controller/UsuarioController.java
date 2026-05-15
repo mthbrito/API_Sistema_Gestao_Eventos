@@ -4,14 +4,14 @@ import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioResponseDTO;
 import ifpb.app_sistema_gestao_eventos.service.UsuarioService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("api/sge/usuarios")
+@RequestMapping("/api/sge/usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -21,8 +21,8 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDTO>> listarUsuarios() {
-        return ResponseEntity.ok(usuarioService.listarUsuarios());
+    public ResponseEntity<Page<UsuarioResponseDTO>> listarUsuarios(Pageable pageable) {
+        return ResponseEntity.ok(usuarioService.listarUsuarios(pageable));
     }
 
     @GetMapping("/{id}")

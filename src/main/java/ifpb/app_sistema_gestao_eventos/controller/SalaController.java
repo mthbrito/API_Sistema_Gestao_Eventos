@@ -4,14 +4,14 @@ import ifpb.app_sistema_gestao_eventos.model.dto.SalaRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.SalaResponseDTO;
 import ifpb.app_sistema_gestao_eventos.service.SalaService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("api/sge/salas")
+@RequestMapping("/api/sge/salas")
 public class SalaController {
 
     private final SalaService salaService;
@@ -21,8 +21,8 @@ public class SalaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SalaResponseDTO>> listarSalas() {
-        return ResponseEntity.ok(salaService.listarSalas());
+    public ResponseEntity<Page<SalaResponseDTO>> listarSalas(Pageable pageable) {
+        return ResponseEntity.ok(salaService.listarSalas(pageable));
     }
 
     @GetMapping("/{id}")

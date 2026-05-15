@@ -6,17 +6,17 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="TB_SALA")
+@Table(name="TB_SALA", uniqueConstraints = {@UniqueConstraint(columnNames = {"nome", "localizacao"})})
 public class Sala {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 15, unique = true)
+    @Column(nullable = false, length = 15)
     private String nome;
 
-    @Column(nullable = false, precision = 3)
+    @Column(nullable = false)
     private int capacidade;
 
     @Column(nullable = false, length = 50)

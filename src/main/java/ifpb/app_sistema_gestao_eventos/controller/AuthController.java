@@ -3,6 +3,7 @@ package ifpb.app_sistema_gestao_eventos.controller;
 import ifpb.app_sistema_gestao_eventos.model.dto.LoginRequestDTO;
 import ifpb.app_sistema_gestao_eventos.security.JwtService;
 import ifpb.app_sistema_gestao_eventos.service.UsuarioDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestDTO dto) {
+    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequestDTO dto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.email(), dto.senha())
         );

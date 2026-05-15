@@ -4,14 +4,14 @@ import ifpb.app_sistema_gestao_eventos.model.dto.PerfilRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.PerfilResponseDTO;
 import ifpb.app_sistema_gestao_eventos.service.PerfilService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("api/sge/perfis")
+@RequestMapping("/api/sge/perfis")
 public class PerfilController {
 
     private final PerfilService perfilService;
@@ -21,8 +21,8 @@ public class PerfilController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PerfilResponseDTO>> listarPerfis() {
-        return ResponseEntity.ok(perfilService.listarPerfis());
+    public ResponseEntity<Page<PerfilResponseDTO>> listarPerfis(Pageable pageable) {
+        return ResponseEntity.ok(perfilService.listarPerfis(pageable));
     }
 
     @GetMapping("/{id}")
