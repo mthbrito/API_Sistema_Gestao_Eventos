@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PerfilRepository extends JpaRepository<Perfil, Long> {
     boolean existsByNome(TipoPerfil nome);
+
     boolean existsByNomeAndIdNot(TipoPerfil nome, Long id);
 }

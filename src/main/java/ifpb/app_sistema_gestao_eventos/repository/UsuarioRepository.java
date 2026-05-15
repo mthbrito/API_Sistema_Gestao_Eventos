@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-  @Query("SELECT u FROM Usuario u LEFT JOIN FETCH u.perfis WHERE u.email = :email")
-  Optional<Usuario> findByEmail(@Param("email") String email);
+    @Query("SELECT u FROM Usuario u LEFT JOIN FETCH u.perfis WHERE u.email = :email")
+    Optional<Usuario> findByEmail(@Param("email") String email);
 
-  boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 
-  boolean existsByEmailAndIdNot(String email, Long id);
+    boolean existsByEmailAndIdNot(String email, Long id);
 }

@@ -13,4 +13,5 @@ public record UsuarioResponseDTO(
         TipoFuncao funcao,
         LocalDate dataCadastro,
         List<TipoPerfil> perfis
-) {}
+) {
+}

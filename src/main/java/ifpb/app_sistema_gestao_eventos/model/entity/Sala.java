@@ -6,7 +6,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="TB_SALA", uniqueConstraints = {@UniqueConstraint(columnNames = {"nome", "localizacao"})})
+@Table(name = "TB_SALA", uniqueConstraints = {@UniqueConstraint(columnNames = {"nome", "localizacao"})})
 public class Sala {
 
     @Id

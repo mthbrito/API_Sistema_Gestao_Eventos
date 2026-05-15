@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="TB_USUARIO")
+@Table(name = "TB_USUARIO")
 public class Usuario {
 
     @Id

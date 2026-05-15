@@ -77,7 +77,7 @@ public class UsuarioService {
     }
 
     public void deletarUsuario(Long id) {
-        if(!usuarioRepository.existsById(id)) {
+        if (!usuarioRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("Usuário não encontrado");
         }
         usuarioRepository.deleteById(id);

@@ -6,11 +6,11 @@ import ifpb.app_sistema_gestao_eventos.model.entity.Perfil;
 
 public class PerfilMapper {
 
-    public static Perfil toPerfil(PerfilRequestDTO perfil){
+    public static Perfil toPerfil(PerfilRequestDTO perfil) {
         return new Perfil(perfil.nome());
     }
 
-    public static PerfilResponseDTO toPerfilResponseDTO(Perfil perfil){
+    public static PerfilResponseDTO toPerfilResponseDTO(Perfil perfil) {
         return new PerfilResponseDTO(
                 perfil.getId(),
                 perfil.getNome()

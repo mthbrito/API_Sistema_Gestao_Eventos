@@ -9,20 +9,20 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 public record UsuarioRequestDTO(
-    @NotBlank
-    @Size(min = 3, max = 100)
-    String nome,
+        @NotBlank
+        @Size(min = 3, max = 100)
+        String nome,
 
-    @Email
-    @NotBlank
-    String email,
+        @Email
+        @NotBlank
+        String email,
 
-    @NotBlank
-    String senha,
+        @NotBlank
+        String senha,
 
-    TipoFuncao funcao,
+        TipoFuncao funcao,
 
-    @NotEmpty
-    List<Long> perfisIds
+        @NotEmpty
+        List<Long> perfisIds
 ) {
 }

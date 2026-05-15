@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="TB_NOTIFICACAO")
+@Table(name = "TB_NOTIFICACAO")
 public class Notificacao {
 
     @Id

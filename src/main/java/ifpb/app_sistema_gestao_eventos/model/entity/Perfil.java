@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="TB_PERFIL")
+@Table(name = "TB_PERFIL")
 public class Perfil {
 
     @Id
