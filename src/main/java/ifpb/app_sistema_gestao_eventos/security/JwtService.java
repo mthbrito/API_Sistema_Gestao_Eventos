@@ -1,5 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.security;
 
+import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -33,8 +34,13 @@ public class JwtService {
     }
 
     public String gerarToken(UserDetails userDetails) {
+        UsuarioDetails usuarioDetails = (UsuarioDetails) userDetails;
+        Usuario usuario = usuarioDetails.getUsuario();
+        String role = usuario.getPerfis().get(0).getNome().name();
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("id", usuario.getId())
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getKey())

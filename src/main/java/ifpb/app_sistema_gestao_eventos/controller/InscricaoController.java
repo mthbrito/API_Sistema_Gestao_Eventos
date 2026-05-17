@@ -25,6 +25,11 @@ public class InscricaoController {
         return ResponseEntity.ok(inscricaoService.listarInscricoes(pageable));
     }
 
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<Page<InscricaoResponseDTO>> listarInscricoesPorUsuarioId(@PathVariable Long id, Pageable pageable) {
+        return ResponseEntity.ok(inscricaoService.listarInscricoesPorUsuarioId(id, pageable));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<InscricaoResponseDTO> buscarInscricaoPorId(@PathVariable Long id) {
         return ResponseEntity.ok(inscricaoService.buscarInscricaoPorId(id));

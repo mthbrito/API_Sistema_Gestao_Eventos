@@ -1,12 +1,14 @@
 package ifpb.app_sistema_gestao_eventos.security;
 
 import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@Getter
 public class UsuarioDetails implements UserDetails {
 
     private final Usuario usuario;

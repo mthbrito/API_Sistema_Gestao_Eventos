@@ -36,6 +36,11 @@ public class InscricaoService {
                 .map(InscricaoMapper::toInscricaoResponseDTO);
     }
 
+    public Page<InscricaoResponseDTO> listarInscricoesPorUsuarioId(Long usuarioId, Pageable pageable) {
+        return inscricaoRepository.findAllByUsuarioId(usuarioId, pageable)
+                .map(InscricaoMapper::toInscricaoResponseDTO);
+    }
+
     public InscricaoResponseDTO buscarInscricaoPorId(Long id) {
         return inscricaoRepository.findById(id)
                 .map(InscricaoMapper::toInscricaoResponseDTO)
