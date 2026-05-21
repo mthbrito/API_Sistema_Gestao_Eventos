@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/sge/eventos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/sge/inscricoes/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.POST, "/api/sge/inscricoes").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/sge/inscricoes/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/sge/inscricoes/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/sge/notificacoes/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/sge/notificacoes/**").hasRole("ADMIN")

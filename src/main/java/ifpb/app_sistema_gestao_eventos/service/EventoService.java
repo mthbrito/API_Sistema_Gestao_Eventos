@@ -10,6 +10,7 @@ import ifpb.app_sistema_gestao_eventos.model.entity.Evento;
 import ifpb.app_sistema_gestao_eventos.repository.EventoRepository;
 import ifpb.app_sistema_gestao_eventos.repository.SalaRepository;
 import ifpb.app_sistema_gestao_eventos.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,7 @@ public class EventoService {
         return EventoMapper.toEventoResponseDTO(eventoRepository.save(eventoAtualizado));
     }
 
+    @Transactional
     public void deletarEvento(Long id) {
         if (!eventoRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("Evento não encontrado");

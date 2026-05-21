@@ -11,7 +11,9 @@ public class InscricaoMapper {
                 inscricao.getDataInscricao(),
                 inscricao.getStatus(),
                 inscricao.isPresente(),
+                inscricao.getUsuario().getId(),
                 inscricao.getUsuario().getNome(),
+                inscricao.getEvento().getId(),
                 inscricao.getEvento().getTitulo()
         );
     }

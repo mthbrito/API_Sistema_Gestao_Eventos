@@ -9,7 +9,9 @@ public record InscricaoResponseDTO(
         LocalDate dataInscricao,
         StatusInscricao status,
         boolean presente,
+        Long usuarioId,
         String usuarioNome,
+        Long eventoId,
         String eventoNome
 ) {
 }

@@ -9,6 +9,7 @@ import ifpb.app_sistema_gestao_eventos.model.entity.Perfil;
 import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
 import ifpb.app_sistema_gestao_eventos.repository.PerfilRepository;
 import ifpb.app_sistema_gestao_eventos.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -76,6 +77,7 @@ public class UsuarioService {
         return UsuarioMapper.toUsuarioResponseDTO(usuarioRepository.save(usuarioAtualizado));
     }
 
+    @Transactional
     public void deletarUsuario(Long id) {
         if (!usuarioRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("Usuário não encontrado");
