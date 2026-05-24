@@ -10,7 +10,6 @@ public class NotificacaoMapper {
     public static Notificacao toNotificacao(NotificacaoRequestDTO notificacao, Usuario usuario) {
         return new Notificacao(
                 notificacao.mensagem(),
-                notificacao.lida(),
                 usuario
         );
     }

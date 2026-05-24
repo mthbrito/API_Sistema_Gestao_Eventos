@@ -11,9 +11,10 @@ public record EventoResponseDTO(
         LocalDate dataInicio,
         LocalDate dataTermino,
         TipoEvento tipoEvento,
+        Long organizadorId,
         String organizadorNome,
+        Long salaId,
         String salaNome,
         String salaLocalizacao,
         int totalInscricoes
-) {
-}
+) {}

@@ -26,7 +26,9 @@ public class EventoMapper {
                 evento.getDataInicio(),
                 evento.getDataTermino(),
                 evento.getTipoEvento(),
+                evento.getOrganizador().getId(),
                 evento.getOrganizador().getNome(),
+                evento.getSala().getId(),
                 evento.getSala().getNome(),
                 evento.getSala().getLocalizacao(),
                 evento.getInscricoes().size()

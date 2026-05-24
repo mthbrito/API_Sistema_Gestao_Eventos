@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NotificacaoService {
 
@@ -35,19 +37,28 @@ public class NotificacaoService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Notificação não encontrada"));
     }
 
-    public NotificacaoResponseDTO salvarNotificacao(NotificacaoRequestDTO dto) {
+    public List<NotificacaoResponseDTO> salvarNotificacao(NotificacaoRequestDTO dto) {
+        if (dto.usuarioId() == null) {
+            return usuarioRepository.findAll()
+                    .stream()
+                    .map(usuario -> {
+                        Notificacao n = NotificacaoMapper.toNotificacao(dto, usuario);
+                        return NotificacaoMapper.toNotificacaoResponseDTO(notificacaoRepository.save(n));
+                    })
+                    .toList();
+        }
+
         Usuario usuario = usuarioRepository.findById(dto.usuarioId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
-        Notificacao novaNotificacao = NotificacaoMapper.toNotificacao(dto, usuario);
-        return NotificacaoMapper.toNotificacaoResponseDTO(notificacaoRepository.save(novaNotificacao));
+        Notificacao n = NotificacaoMapper.toNotificacao(dto, usuario);
+        return List.of(NotificacaoMapper.toNotificacaoResponseDTO(notificacaoRepository.save(n)));
     }
 
-    public NotificacaoResponseDTO atualizarNotificacao(Long id, NotificacaoRequestDTO notificacao) {
-        Notificacao notificacaoAtualizada = notificacaoRepository.findById(id)
+    public NotificacaoResponseDTO atualizarNotificacao(Long id, NotificacaoRequestDTO dto) {
+        Notificacao notificacao = notificacaoRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Notificação não encontrada"));
-        notificacaoAtualizada.setMensagem(notificacao.mensagem());
-        notificacaoAtualizada.setLida(notificacao.lida());
-        return NotificacaoMapper.toNotificacaoResponseDTO(notificacaoRepository.save(notificacaoAtualizada));
+        notificacao.setMensagem(dto.mensagem());
+        return NotificacaoMapper.toNotificacaoResponseDTO(notificacaoRepository.save(notificacao));
     }
 
     public void deletarNotificacao(Long id) {

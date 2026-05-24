@@ -9,10 +9,6 @@ public record NotificacaoRequestDTO(
         @Size(min = 3, max = 255)
         String mensagem,
 
-        @NotNull
-        Boolean lida,
-
-        @NotNull
         Long usuarioId
 ) {
 }

@@ -33,7 +33,7 @@ public class NotificacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<NotificacaoResponseDTO> salvarNotificacao(@Valid @RequestBody NotificacaoRequestDTO notificacao) {
+    public ResponseEntity<List<NotificacaoResponseDTO>> salvarNotificacao(@Valid @RequestBody NotificacaoRequestDTO notificacao) {
         return ResponseEntity.status(HttpStatus.CREATED).body(notificacaoService.salvarNotificacao(notificacao));
     }
 
