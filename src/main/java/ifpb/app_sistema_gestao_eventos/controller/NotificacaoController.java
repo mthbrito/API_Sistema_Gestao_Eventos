@@ -27,6 +27,13 @@ public class NotificacaoController {
         return ResponseEntity.ok(notificacaoService.listarNotificacoes(pageable));
     }
 
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<Page<NotificacaoResponseDTO>> listarNotificacoesPorUsuario(
+            @PathVariable Long usuarioId,
+            Pageable pageable) {
+        return ResponseEntity.ok(notificacaoService.listarNotificacoesPorUsuario(usuarioId, pageable));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<NotificacaoResponseDTO> buscarNotificacaoPorId(@PathVariable Long id) {
         return ResponseEntity.ok(notificacaoService.buscarNotificacaoPorId(id));

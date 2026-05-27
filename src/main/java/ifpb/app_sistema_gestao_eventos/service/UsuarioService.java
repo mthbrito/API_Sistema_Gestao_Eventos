@@ -44,6 +44,12 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
     }
 
+    public UsuarioResponseDTO buscarUsuarioPorEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .map(UsuarioMapper::toUsuarioResponseDTO)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("usuário não encontrado"));
+    }
+
     public UsuarioResponseDTO salvarUsuario(UsuarioRequestDTO usuario) {
         if (usuarioRepository.existsByEmail(usuario.email())) {
             throw new EntidadeJaCadastradaException("E-mail já cadastrado");
@@ -84,4 +90,6 @@ public class UsuarioService {
         }
         usuarioRepository.deleteById(id);
     }
+
+
 }

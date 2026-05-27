@@ -31,6 +31,11 @@ public class NotificacaoService {
                 .map(NotificacaoMapper::toNotificacaoResponseDTO);
     }
 
+    public Page<NotificacaoResponseDTO> listarNotificacoesPorUsuario(Long usuarioId, Pageable pageable) {
+        return notificacaoRepository.findByUsuarioId(usuarioId, pageable)
+                .map(NotificacaoMapper::toNotificacaoResponseDTO);
+    }
+
     public NotificacaoResponseDTO buscarNotificacaoPorId(Long id) {
         return notificacaoRepository.findById(id)
                 .map(NotificacaoMapper::toNotificacaoResponseDTO)

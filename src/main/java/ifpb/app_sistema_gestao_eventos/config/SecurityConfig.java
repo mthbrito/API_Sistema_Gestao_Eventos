@@ -37,7 +37,11 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/sge/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/sge/auth/recuperar-senha").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/sge/auth/redefinir-senha").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/sge/usuarios").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/sge/usuarios/{id}").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/sge/usuarios/{id}").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/sge/usuarios/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/sge/perfis/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/sge/perfis/**").hasRole("ADMIN")
@@ -49,9 +53,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/sge/inscricoes").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/sge/inscricoes/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/sge/inscricoes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/sge/notificacoes/usuario/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.GET, "/api/sge/notificacoes/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/sge/notificacoes/**").hasRole("ADMIN")
-
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(this::configureExceptionHandling)
