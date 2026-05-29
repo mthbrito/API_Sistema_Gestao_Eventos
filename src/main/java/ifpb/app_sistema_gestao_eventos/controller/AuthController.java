@@ -1,9 +1,6 @@
 package ifpb.app_sistema_gestao_eventos.controller;
 
-import ifpb.app_sistema_gestao_eventos.model.dto.LoginRequestDTO;
-import ifpb.app_sistema_gestao_eventos.model.dto.LoginResponseDTO;
-import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioRequestDTO;
-import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioResponseDTO;
+import ifpb.app_sistema_gestao_eventos.model.dto.*;
 import ifpb.app_sistema_gestao_eventos.security.JwtService;
 import ifpb.app_sistema_gestao_eventos.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -51,8 +48,8 @@ public class AuthController {
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity<UsuarioResponseDTO> cadastrar(@Valid @RequestBody UsuarioRequestDTO dto) {
-        UsuarioResponseDTO usuario = usuarioService.salvarUsuario(dto);
+    public ResponseEntity<UsuarioResponseDTO> cadastrar(@Valid @RequestBody CadastroRequestDTO dto) {
+        UsuarioResponseDTO usuario = usuarioService.cadastrarUsuario(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
     }
 }

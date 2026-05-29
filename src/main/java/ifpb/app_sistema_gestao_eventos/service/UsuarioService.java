@@ -3,10 +3,12 @@ package ifpb.app_sistema_gestao_eventos.service;
 import ifpb.app_sistema_gestao_eventos.exception.EntidadeJaCadastradaException;
 import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
 import ifpb.app_sistema_gestao_eventos.mapper.UsuarioMapper;
+import ifpb.app_sistema_gestao_eventos.model.dto.CadastroRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioResponseDTO;
 import ifpb.app_sistema_gestao_eventos.model.entity.Perfil;
 import ifpb.app_sistema_gestao_eventos.model.entity.Usuario;
+import ifpb.app_sistema_gestao_eventos.model.enumeration.TipoPerfil;
 import ifpb.app_sistema_gestao_eventos.repository.PerfilRepository;
 import ifpb.app_sistema_gestao_eventos.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -62,6 +64,22 @@ public class UsuarioService {
         }
         novoUsuario.setPerfis(perfis);
         return toUsuarioResponseDTO(usuarioRepository.save(novoUsuario));
+    }
+
+    public UsuarioResponseDTO cadastrarUsuario(CadastroRequestDTO dto) {
+        if (usuarioRepository.existsByEmail(dto.email())) {
+            throw new EntidadeJaCadastradaException("E-mail já cadastrado");
+        }
+        Perfil tipoPerfil = perfilRepository.findByNome(TipoPerfil.USER)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Perfil padrão não encontrado"));
+        Usuario usuario = new Usuario(
+                dto.nome(),
+                dto.email(),
+                passwordEncoder.encode(dto.senha()),
+                dto.funcao()
+        );
+        usuario.setPerfis(List.of(tipoPerfil));
+        return toUsuarioResponseDTO(usuarioRepository.save(usuario));
     }
 
     public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioRequestDTO usuario) {
