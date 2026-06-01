@@ -15,7 +15,7 @@ public record CadastroRequestDTO(
         String email,
 
         @NotBlank
-        @Size(min = 6)
+        @Size(min = 4)
         String senha,
 
         TipoFuncao funcao
