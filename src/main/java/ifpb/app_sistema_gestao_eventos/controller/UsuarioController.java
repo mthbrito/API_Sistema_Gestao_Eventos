@@ -2,6 +2,7 @@ package ifpb.app_sistema_gestao_eventos.controller;
 
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioResponseDTO;
+import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioUpdateDTO;
 import ifpb.app_sistema_gestao_eventos.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -38,7 +39,7 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(
             @PathVariable Long id,
-            @Valid @RequestBody UsuarioRequestDTO dto) {
+            @Valid @RequestBody UsuarioUpdateDTO dto) {
         return ResponseEntity.ok(usuarioService.atualizarUsuario(id, dto));
     }
 
