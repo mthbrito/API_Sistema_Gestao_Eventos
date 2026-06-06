@@ -2,6 +2,7 @@ package ifpb.app_sistema_gestao_eventos.service;
 
 import ifpb.app_sistema_gestao_eventos.exception.EntidadeJaCadastradaException;
 import ifpb.app_sistema_gestao_eventos.exception.EntidadeNaoEncontradaException;
+import ifpb.app_sistema_gestao_eventos.exception.RegraDeNegocioException;
 import ifpb.app_sistema_gestao_eventos.mapper.UsuarioMapper;
 import ifpb.app_sistema_gestao_eventos.model.dto.CadastroRequestDTO;
 import ifpb.app_sistema_gestao_eventos.model.dto.UsuarioRequestDTO;
@@ -19,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static ifpb.app_sistema_gestao_eventos.mapper.UsuarioMapper.toUsuario;
 import static ifpb.app_sistema_gestao_eventos.mapper.UsuarioMapper.toUsuarioResponseDTO;
@@ -30,7 +34,13 @@ public class UsuarioService {
     private final PerfilRepository perfilRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PerfilRepository perfilRepository, PasswordEncoder passwordEncoder) {
+    // Armazena tokens de recuperação em memória: token -> email
+    // Para produção real usaria banco de dados com expiração
+    private final Map<String, String> tokensRecuperacao = new ConcurrentHashMap<>();
+
+    public UsuarioService(UsuarioRepository usuarioRepository,
+                          PerfilRepository perfilRepository,
+                          PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.perfilRepository = perfilRepository;
         this.passwordEncoder = passwordEncoder;
@@ -50,7 +60,7 @@ public class UsuarioService {
     public UsuarioResponseDTO buscarUsuarioPorEmail(String email) {
         return usuarioRepository.findByEmail(email)
                 .map(UsuarioMapper::toUsuarioResponseDTO)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("usuário não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
     }
 
     public UsuarioResponseDTO salvarUsuario(UsuarioRequestDTO usuario) {
@@ -83,26 +93,6 @@ public class UsuarioService {
         return toUsuarioResponseDTO(usuarioRepository.save(usuario));
     }
 
-//    public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioRequestDTO usuario) {
-//        Usuario usuarioAtualizado = usuarioRepository.findById(id)
-//                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
-//        if (usuarioRepository.existsByEmailAndIdNot(usuario.email(), id)) {
-//            throw new EntidadeJaCadastradaException("E-mail já está em uso por outro usuário");
-//        }
-//        usuarioAtualizado.setNome(usuario.nome());
-//        usuarioAtualizado.setEmail(usuario.email());
-//        usuarioAtualizado.setFuncao(usuario.funcao());
-//        if (usuario.senha() != null && !usuario.senha().isBlank()) {
-//            usuarioAtualizado.setSenha(passwordEncoder.encode(usuario.senha()));
-//        }
-//        List<Perfil> perfis = perfilRepository.findAllById(usuario.perfisIds());
-//        if (perfis.size() != usuario.perfisIds().size()) {
-//            throw new EntidadeNaoEncontradaException("Um ou mais perfis não encontrados");
-//        }
-//        usuarioAtualizado.setPerfis(perfis);
-//        return UsuarioMapper.toUsuarioResponseDTO(usuarioRepository.save(usuarioAtualizado));
-//    }
-
     public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioUpdateDTO usuario) {
         Usuario usuarioAtualizado = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
@@ -131,5 +121,36 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
+    // ── Recuperação de senha ────────────────────────────────────
 
+    public String gerarTokenRecuperacao(String email) {
+        // Verifica se o e-mail existe (sem revelar se existe ou não, mas para fins
+        // acadêmicos retornamos erro direto)
+        if (!usuarioRepository.existsByEmail(email)) {
+            throw new EntidadeNaoEncontradaException("E-mail não encontrado");
+        }
+        // Gera um token simples de 8 caracteres maiúsculos (fácil de copiar)
+        String token = UUID.randomUUID().toString()
+                .replace("-", "")
+                .substring(0, 8)
+                .toUpperCase();
+
+        tokensRecuperacao.put(token, email);
+        return token;
+    }
+
+    public void redefinirSenha(String token, String novaSenha) {
+        String email = tokensRecuperacao.get(token);
+        if (email == null) {
+            throw new RegraDeNegocioException("Token inválido ou expirado");
+        }
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
+
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+        usuarioRepository.save(usuario);
+
+        // Remove o token após uso (só pode usar uma vez)
+        tokensRecuperacao.remove(token);
+    }
 }

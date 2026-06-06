@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/sge/auth")
 public class AuthController {
@@ -51,5 +53,23 @@ public class AuthController {
     public ResponseEntity<UsuarioResponseDTO> cadastrar(@Valid @RequestBody CadastroRequestDTO dto) {
         UsuarioResponseDTO usuario = usuarioService.cadastrarUsuario(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+    }
+
+    // ── Etapa 1: recebe o e-mail e devolve o token na resposta ──
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<Map<String, String>> recuperarSenha(
+            @Valid @RequestBody RecuperarSenhaRequestDTO dto) {
+
+        String token = usuarioService.gerarTokenRecuperacao(dto.email());
+        return ResponseEntity.ok(Map.of("token", token));
+    }
+
+    // ── Etapa 2: recebe o token e a nova senha ──────────────────
+    @PostMapping("/redefinir-senha")
+    public ResponseEntity<Void> redefinirSenha(
+            @Valid @RequestBody RedefinirSenhaRequestDTO dto) {
+
+        usuarioService.redefinirSenha(dto.token(), dto.novaSenha());
+        return ResponseEntity.noContent().build();
     }
 }
